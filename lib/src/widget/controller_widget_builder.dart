@@ -391,6 +391,7 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
     }
     //设置进度
     await controller.seekTo(targetSeek);
+
     var videoInfo = await controller.getVideoInfo();
     if (targetSeek < videoInfo.duration) await controller.play();
   }
@@ -408,6 +409,9 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
 
   void _onVerticalDragUpdate(DragUpdateDetails details) async {
     if (verticalDragging == false) return;
+
+    // TODO 这里判断一下是否是全屏 不是全屏就不能滑动调节音量和亮度
+    if(!this.widget.currentFullScreenState) return;
 
     String text = "";
     IconData iconData = Icons.volume_up;
@@ -539,7 +543,10 @@ class _ProgressCalculator {
 
   String calcUpdate(DragUpdateDetails details) {
     dx = details.globalPosition.dx - startDetails.globalPosition.dx;
-    LogUtils.debug("dx = ${dx}  details.globalPosition.dx = ${details.globalPosition.dx}   startDetails.globalPosition.dx = ${startDetails.globalPosition.dx}");
+
+    LogUtils.debug("现在 = ${details.globalPosition.dx}   历史 = ${startDetails.globalPosition.dx}");
+
+
     var f = dx > 0 ? "+" : "-";
     var offset = getOffsetPosition().round().abs();
     return "$f${offset}s";

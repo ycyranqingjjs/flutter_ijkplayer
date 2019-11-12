@@ -1,3 +1,5 @@
+根据  https://github.com/CaiJingLong/flutter_ijkplayer 修改
+
 # ijkplayer
 
 [![pub package](https://img.shields.io/pub/v/flutter_ijkplayer.svg)](https://pub.dartlang.org/packages/flutter_ijkplayer)
