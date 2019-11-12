@@ -51,12 +51,16 @@ class IjkStatusWidget extends StatelessWidget {
       return _buildFailWidget(context);
     }
     if (status == IjkStatus.pause) {
-      return _buildCenterIconButton(Icons.play_arrow, controller.play);
+      return _buildCenterIconButton(Icons.play_arrow, (){
+//        controller.play;
+        controller.playOrPause(pauseOther: true);
+      });
     }
     if (status == IjkStatus.complete) {
       return _buildCenterIconButton(Icons.replay, () async {
         await controller?.seekTo(0);
-        await controller?.play();
+//        await controller?.play();
+        await controller?.playOrPause(pauseOther: true);
       });
     }
     return Container();
@@ -66,7 +70,12 @@ class IjkStatusWidget extends StatelessWidget {
     BuildContext context,
     IjkMediaController controller,
   ) {
-    return _buildCenterIconButton(Icons.play_arrow, controller.play);
+
+
+    return _buildCenterIconButton(Icons.play_arrow, (){
+//      controller.play;
+      controller.playOrPause(pauseOther: true);
+    });
   }
 }
 

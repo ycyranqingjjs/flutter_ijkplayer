@@ -14,7 +14,6 @@ class _NetworkPageState extends State<NetworkPage> {
   @override
   void initState() {
     super.initState();
-
     editingController.text =
         "https://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_30mb.mp4";
     // editingController.text =
@@ -70,6 +69,7 @@ class _NetworkPageState extends State<NetworkPage> {
             height: 400,
             child: IjkPlayer(
               mediaController: mediaController,
+
             ),
           ),
         ],

@@ -11,6 +11,8 @@ import 'package:flutter_ijkplayer/src/helper/ui_helper.dart';
 import 'package:flutter_ijkplayer/src/route/fullscreen_route.dart';
 import 'package:flutter_ijkplayer/src/widget/progress_bar.dart';
 
+import 'IconFont.dart';
+
 part 'full_screen.part.dart';
 
 /// Using mediaController to Construct a Controller UI
@@ -123,11 +125,20 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
 
   bool _isShow = true;
 
+  Timer _timer;
+
   set isShow(bool value) {
     _isShow = value;
     setState(() {});
     if (value == true) {
       controller.refreshVideoInfo();
+      _timer = new Timer.periodic(new Duration(milliseconds: 3500), (timer) {
+
+        isShow = false;
+      });
+
+    }else{
+      _timer?.cancel();
     }
   }
 
@@ -189,12 +200,15 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
       behavior: HitTestBehavior.opaque,
       child: buildContent(),
       onDoubleTap: onDoubleTap(),
+
       onHorizontalDragStart: wrapHorizontalGesture(_onHorizontalDragStart),
       onHorizontalDragUpdate: wrapHorizontalGesture(_onHorizontalDragUpdate),
       onHorizontalDragEnd: wrapHorizontalGesture(_onHorizontalDragEnd),
+
       onVerticalDragStart: wrapVerticalGesture(_onVerticalDragStart),
       onVerticalDragUpdate: wrapVerticalGesture(_onVerticalDragUpdate),
       onVerticalDragEnd: wrapVerticalGesture(_onVerticalDragEnd),
+
       onTap: onTap,
       key: currentKey,
     );
@@ -229,6 +243,7 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
     return IconButton(
       color: Colors.white,
       icon: Icon(isFull ? Icons.fullscreen_exit : Icons.fullscreen),
+//      icon: Icon(isFull ? IconFont.icon_Exit_Full : IconFont.icon_Full_Screen),
       onPressed: () {
         if (isFull) {
           Navigator.pop(context);
@@ -335,7 +350,7 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
 
   void _onHorizontalDragStart(DragStartDetails details) async {
     var videoInfo = await controller.getVideoInfo();
-    _calculator = _ProgressCalculator(details, videoInfo);
+    _calculator = _ProgressCalculator(details, videoInfo,this.widget.currentFullScreenState);
   }
 
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
@@ -363,6 +378,7 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
       ],
     );
 
+    //在弹窗中显示快进快退
     showTooltip(createTooltipWidgetWrapper(w));
   }
 
@@ -373,6 +389,7 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
     if (targetSeek == null) {
       return;
     }
+    //设置进度
     await controller.seekTo(targetSeek);
     var videoInfo = await controller.getVideoInfo();
     if (targetSeek < videoInfo.duration) await controller.play();
@@ -394,6 +411,7 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
 
     String text = "";
     IconData iconData = Icons.volume_up;
+//    IconData iconData = IconFont.icon_Audio_high;
 
     if (leftVerticalDrag == false) {
       if (details.delta.dy > 0) {
@@ -406,10 +424,13 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
 
       if (currentVolume <= 0) {
         iconData = Icons.volume_mute;
+//        iconData = IconFont.icon_Audio_off;
       } else if (currentVolume < 50) {
         iconData = Icons.volume_down;
+//        iconData = IconFont.icon_Audio_low;
       } else {
         iconData = Icons.volume_up;
+//        iconData = IconFont.icon_Audio_high;
       }
 
       text = currentVolume.toString();
@@ -510,13 +531,15 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
 class _ProgressCalculator {
   DragStartDetails startDetails;
   VideoInfo info;
+  bool isFull;
 
   double dx;
 
-  _ProgressCalculator(this.startDetails, this.info);
+  _ProgressCalculator(this.startDetails, this.info,this.isFull);
 
   String calcUpdate(DragUpdateDetails details) {
     dx = details.globalPosition.dx - startDetails.globalPosition.dx;
+    LogUtils.debug("dx = ${dx}  details.globalPosition.dx = ${details.globalPosition.dx}   startDetails.globalPosition.dx = ${startDetails.globalPosition.dx}");
     var f = dx > 0 ? "+" : "-";
     var offset = getOffsetPosition().round().abs();
     return "$f${offset}s";
@@ -533,7 +556,14 @@ class _ProgressCalculator {
   }
 
   double getOffsetPosition() {
-    return dx / 10;
+//    if(isFull){
+//      return dx;
+//    }else{
+//      return dx / 10;
+//    }
+
+    return dx;
+
   }
 }
 
@@ -566,12 +596,43 @@ class PortraitController extends StatelessWidget {
     return Column(
       children: <Widget>[
         Expanded(
-          child: Container(),
+          child: Container(
+            color: Colors.black.withOpacity(0.12),
+//            color: Colors.yellow,
+            child: Container(
+//              color: Colors.red,
+              margin: EdgeInsets.only(top: 48),
+              child: info.isPlaying? _buildCenterIconButton(Icons.pause, (){
+                controller.playOrPause(pauseOther: true);
+              }) : Center(),
+            ),
+          ),
         ),
         bottomBar,
       ],
     );
   }
+
+
+  Widget _buildCenterIconButton(IconData iconData, Function onTap) {
+    return Center(
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.75),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: IconButton(
+          iconSize: 30,
+          color: Colors.black,
+          icon: Icon(iconData),
+          onPressed: onTap,
+        ),
+      ),
+    );
+  }
+
 
   Widget buildBottomBar(BuildContext context) {
     var currentTime = buildCurrentText();
@@ -584,7 +645,9 @@ class PortraitController extends StatelessWidget {
 
     Widget widget = Row(
       children: <Widget>[
-        playButton,
+        //TODO 注释掉这里的播放暂停按钮
+//        playButton,
+
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: currentTime,
@@ -594,6 +657,7 @@ class PortraitController extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: maxTime,
         ),
+
         fullScreenButton,
       ],
     );
@@ -691,7 +755,8 @@ class PortraitController extends StatelessWidget {
     );
 
     var tooltip = tooltipDelegate?.createTooltipWidgetWrapper(text);
-    tooltipDelegate?.showTooltip(tooltip);
+    //TODO 暂时注释掉拖动进度条快进
+//    tooltipDelegate?.showTooltip(tooltip);
   }
 
   Widget buildFullScreenButton() {

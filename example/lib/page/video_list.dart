@@ -10,9 +10,44 @@ class VideoList extends StatefulWidget {
 class _VideoListState extends State<VideoList> {
   var list = <DataSource>[
     DataSource.network(
-        "https://www.sample-videos.com/video123/mp4/360/big_buck_bunny_360p_30mb.mp4"),
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
     DataSource.network(
-        "https://www.sample-videos.com/video123/mp4/360/big_buck_bunny_360p_30mb.mp4"),
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+    DataSource.network(
+        "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"),
+
     DataSource.asset("assets/sample1.mp4")
   ];
 
@@ -144,6 +179,8 @@ class _VideoItemState extends State<VideoItem> {
     return DefaultIJKControllerWidget(
       controller: controller,
       verticalGesture: false,
+      horizontalGesture: false,
+      showFullScreenButton: false,
     );
   }
 }
