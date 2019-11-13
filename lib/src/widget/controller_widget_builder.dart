@@ -11,8 +11,6 @@ import 'package:flutter_ijkplayer/src/helper/ui_helper.dart';
 import 'package:flutter_ijkplayer/src/route/fullscreen_route.dart';
 import 'package:flutter_ijkplayer/src/widget/progress_bar.dart';
 
-import 'IconFont.dart';
-
 part 'full_screen.part.dart';
 
 /// Using mediaController to Construct a Controller UI
@@ -62,6 +60,12 @@ class DefaultIJKControllerWidget extends StatefulWidget {
   /// Whether to automatically hide the status bar when it is full screen.
   final bool hideSystemBarOnFullScreen;
 
+  //全屏icon
+  final IconData fullscreenIcon;
+
+  //取消全屏icon
+  final IconData fullscreenExitIcon;
+
   /// Callback in full screen, full screen when enter true, false to exit full screen.
   final void Function(bool enter) onFullScreen;
 
@@ -79,6 +83,8 @@ class DefaultIJKControllerWidget extends StatefulWidget {
     this.fullscreenControllerWidgetBuilder,
     this.fullScreenType = FullScreenType.rotateBox,
     this.hideSystemBarOnFullScreen = true,
+    this.fullscreenIcon = Icons.fullscreen,
+    this.fullscreenExitIcon = Icons.fullscreen_exit,
     this.onFullScreen,
   }) : super(key: key);
 
@@ -242,8 +248,8 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
 
     return IconButton(
       color: Colors.white,
-      icon: Icon(isFull ? Icons.fullscreen_exit : Icons.fullscreen),
-//      icon: Icon(isFull ? IconFont.icon_Exit_Full : IconFont.icon_Full_Screen),
+//      icon: Icon(isFull ? Icons.fullscreen_exit : Icons.fullscreen),
+      icon: Icon(isFull ? this.widget.fullscreenExitIcon : this.widget.fullscreenIcon),
       onPressed: () {
         if (isFull) {
           Navigator.pop(context);

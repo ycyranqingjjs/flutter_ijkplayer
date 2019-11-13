@@ -18,8 +18,3 @@ flutter:
   plugin:
     androidPackage: top.kikt.ijkplayer
     pluginClass: IjkplayerPlugin
-
-fonts:
-  - family: iconfont
-    fonts:
-      - asset: fonts/iconfont.ttf
