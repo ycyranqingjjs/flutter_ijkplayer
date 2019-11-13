@@ -39,6 +39,10 @@ class IjkPlayer extends StatefulWidget {
 
   final StatusWidgetBuilder statusWidgetBuilder;
 
+  final bool autoPlay;
+
+  final DataSource dataSource;
+
   /// Main Classes of Library
   const IjkPlayer({
     Key key,
@@ -46,6 +50,8 @@ class IjkPlayer extends StatefulWidget {
     this.controllerWidgetBuilder = defaultBuildIjkControllerWidget,
     this.textureBuilder = buildDefaultIjkPlayer,
     this.statusWidgetBuilder = IjkStatusWidget.buildStatusWidget,
+    this.autoPlay = false,
+    this.dataSource,
   }) : super(key: key);
 
   @override
@@ -56,12 +62,17 @@ class IjkPlayer extends StatefulWidget {
 class IjkPlayerState extends State<IjkPlayer> {
   /// see [IjkMediaController]
   IjkMediaController controller;
+  DataSource dataSource;
   GlobalKey _wrapperKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     controller = widget.mediaController ?? IjkMediaController();
+
+    initIjkController();
+
+
   }
 
   @override
@@ -146,6 +157,14 @@ class IjkPlayerState extends State<IjkPlayer> {
             Container();
       },
     );
+  }
+
+  void initIjkController() async {
+    if(widget.autoPlay ?? false){
+      await controller.setDataSource(dataSource ??  DataSource.network(
+          "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4"), autoPlay: true);
+      await controller.pauseOtherController();
+    }
   }
 }
 
