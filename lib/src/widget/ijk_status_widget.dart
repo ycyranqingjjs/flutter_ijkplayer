@@ -50,12 +50,12 @@ class IjkStatusWidget extends StatelessWidget {
     if (status == IjkStatus.error) {
       return _buildFailWidget(context);
     }
-    if (status == IjkStatus.pause) {
-      return _buildCenterIconButton(Icons.play_arrow, (){
-//        controller.play;
-        controller.playOrPause(pauseOther: true);
-      });
-    }
+//    if (status == IjkStatus.pause) {  //暂停状态
+//      return _buildCenterIconButton(Icons.play_arrow, (){
+////        controller.play;
+//        controller.playOrPause(pauseOther: true);
+//      });
+//    }
     if (status == IjkStatus.complete) {
       return _buildCenterIconButton(Icons.replay, () async {
         await controller?.seekTo(0);
@@ -94,13 +94,14 @@ Widget _buildCenterIconButton(IconData iconData, Function onTap) {
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.75),
+//        color: Colors.white.withOpacity(0.75),
+        color: Color(0x7F171B20),
         borderRadius: BorderRadius.circular(30),
       ),
       child: IconButton(
         iconSize: 30,
-        color: Colors.black,
-        icon: Icon(iconData),
+        color: Colors.white,
+        icon: Icon(iconData,color: Colors.white,),
         onPressed: onTap,
       ),
     ),

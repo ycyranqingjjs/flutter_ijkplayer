@@ -129,7 +129,8 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
 
   GlobalKey currentKey = GlobalKey();
 
-  bool _isShow = true;
+//  bool _isShow = true;
+  bool _isShow = false; //默认显示控制
 
   Timer _timer;
 
@@ -605,27 +606,66 @@ class PortraitController extends StatelessWidget {
     if (!info.hasData) {
       return Container();
     }
-    Widget bottomBar = buildBottomBar(context);
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Container(
-            color: Colors.black.withOpacity(0.12),
-//            color: Colors.yellow,
-            child: Container(
-//              color: Colors.red,
-              margin: EdgeInsets.only(top: 48),
-              child: info.isPlaying? _buildCenterIconButton(Icons.pause, (){
-                controller.playOrPause(pauseOther: true);
-              }) : Center(),
-            ),
-          ),
-        ),
-        bottomBar,
-      ],
-    );
+    return _buildCenterStatueIcon(context,controller);
+
+//    Widget bottomBar = buildBottomBar(context);
+//    return Column(
+//      children: <Widget>[
+//        Expanded(
+//          child: Container(
+//            color: Colors.black.withOpacity(0.12),
+////            color: Colors.yellow,
+//            child: Container(
+////              color: Colors.red,
+//              margin: EdgeInsets.only(top: 48),
+//              child: info.isPlaying? _buildCenterIconButton(Icons.pause, (){
+//                controller.playOrPause(pauseOther: true);
+//              }) : _buildCenterIconButton(Icons.play_arrow, (){
+//                controller.playOrPause(pauseOther: true);
+//              }),
+//            ),
+//          ),
+//        ),
+//        bottomBar,
+//      ],
+//    );
   }
 
+
+  Widget _buildCenterStatueIcon(BuildContext context,IjkMediaController controller){
+    if(controller.ijkStatus == IjkStatus.error){
+      return Center();
+    }else if(controller.ijkStatus == IjkStatus.complete ){
+      Widget bottomBar = buildBottomBar(context);
+      return Column(
+        children: <Widget>[
+          bottomBar,
+        ],
+      );
+    }else{
+      Widget bottomBar = buildBottomBar(context);
+      return Column(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              color: Colors.black.withOpacity(0.12),
+//            color: Colors.yellow,
+              child: Container(
+//              color: Colors.red,
+                margin: EdgeInsets.only(top: 48),
+                child: info.isPlaying? _buildCenterIconButton(Icons.pause, (){
+                  controller.playOrPause(pauseOther: true);
+                }) : _buildCenterIconButton(Icons.play_arrow, (){
+                  controller.playOrPause(pauseOther: true);
+                }),
+              ),
+            ),
+          ),
+          bottomBar,
+        ],
+      );
+    }
+  }
 
   Widget _buildCenterIconButton(IconData iconData, Function onTap) {
     return Center(
@@ -633,12 +673,13 @@ class PortraitController extends StatelessWidget {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.75),
+//          color: Colors.white.withOpacity(0.75),
+          color: Color(0x7F171B20),
           borderRadius: BorderRadius.circular(30),
         ),
         child: IconButton(
           iconSize: 30,
-          color: Colors.black,
+          color: Colors.white,
           icon: Icon(iconData),
           onPressed: onTap,
         ),
